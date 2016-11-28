@@ -1,34 +1,84 @@
 <!DOCTYPE html>
-<html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
 <head>
-    <meta charset="utf-8" />
-    <title>Learn how to build HTML5 Games</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <title>Web Game Development</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="assets/plugins/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="assets/plugins/elegant_font/css/style.css">
+
+    <!-- Theme CSS -->
+    <link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
-<body>
 
-<h1>HTML 5 Game Development</h1>
+<body class="landing-page">
 
-<p>This Content Kit was created by <a href="http://end3r.com">Andrzej Mazur</a> - you can ping him on Twitter <a href="https://twitter.com/end3r">@end3r</a> or send him an email.</p>
+    <div class="page-wrapper">
 
-<p>Welcome to the <strong>Mobile Web Games Starter Kit</strong> or <strong>HTML5 Game Development with Phaser</strong>.</p>
-<p>This <strong>Activity</strong> will help you build your first HTML5 game in 16 lessons using the Phaser framework. It is prepared especially for beginners and you can use it to learn it yourself or teach others in your Campus Club</p>
+        <!-- ******Header****** -->
+        <header class="header text-center">
+            <div class="container">
+                <div class="branding">
+                    <h1 class="logo">
 
-<a href="https://github.com/end3r/Gamedev-Phaser-Content-Kit/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+                        <span class="text-bold">BUILD</span><span class="text-highlight">AN HTML5 Game</span>
+                    </h1>
+                </div><!--//branding-->
+                <div class="tagline">
+                    <p>A step-by-step tutorial for building a Breakout game </p>
+
+                </div><!--//tagline-->
+
+            </div><!--//container-->
+        </header><!--//header-->
+
+        <section class="cards-section text-center">
+            <div class="container">
+                <h2 class="title">Getting started is easy!</h2>
+                <div class="intro">
+                    <p>Welcome to the HTML5 Game Development Activity. In this step-by-step tutorial you will create a simple mobile Breakout game written in JavaScript and using the Phaser framework.</p>
+                    <p>Every step has editable, live samples available to play with so you can see what the intermediate stages should look like. You will learn the basics of using the Phaser framework to implement fundamental game mechanics like rendering and moving images, collision detection, control machanisms, framework-specific helper functions, animations and tweens, and winning and losing states.</p>
+                    <div class="cta-container">
+                        <a class="btn btn-primary btn-cta" href="Game-Development.html"><i class="fa fa-gamepad"></i> Let's start!</a>
+                    </div><!--//cta-container-->
+                </div><!--//intro-->
 
 
-<h3> Are you ready? <a href="tutorial/index.html">Let's start!</a></h3>
-<h2>Reference materials</h2>
+            </div><!--//container-->
+        </section><!--//cards-section-->
+    </div><!--//page-wrapper-->
 
-<p>Follow these external resources to learn more about HTML5 game development.</p>
+    <footer id="footer" class="footer text-center">
+        <div class="container">
+            <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can check out other license options via our website: themes.3rdwavemedia.com */-->
+            <small class="copyright"><p class="license">Portions of this content are ©1998–2016 by individual mozilla.org contributors. Content available under a <a href="https://www.mozilla.org/foundation/licensing/website-content/">Creative Commons license</a>.</p></small>
 
-<ul>
-	<li><a href="https://developer.mozilla.org/en-US/docs/Games">MDN Games area</a></li>
-	<li><a href="http://www.html5gamedevs.com/">HTML5 Game Devs forums</a></li>
-	<li><a href="http://html5devstarter.enclavegames.com/">HTML5 Gamedev Starter</a></li>
-	<li><a href="http://gamedevjsweekly.com/">Gamedev.js Weekly newsletter</a></li>
-	<li><a href="http://webchat.freenode.net/?channels=bbg">#BBG IRC channel at Freenode</a></li>
-</ul>
+        </div>
+        <!--//container-->
+    </footer>
+
+
+    <!-- Main Javascript -->
+    <script type="text/javascript" src="assets/plugins/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/plugins/jquery-match-height/jquery.matchHeight-min.js"></script>
+    <script type="text/javascript" src="assets/js/main.js"></script>
 
 </body>
 </html>

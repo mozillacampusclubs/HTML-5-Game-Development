@@ -6,7 +6,7 @@
 <!--<![endif]-->
 
 <head>
-    <title>Responsive website template for documentations</title>
+    <title>Snake Game-Phaser</title>
     <!-- Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,7 +48,7 @@
                 <!--//branding-->
                 <ol class="breadcrumb">
                     <li><a href="index.html">Home</a></li>
-                    <li class="active">Lesson 2</li>
+                    <li class="active">Game Development</li>
                 </ol>
             </div>
             <!--//container-->
@@ -57,41 +57,195 @@
         <div class="doc-wrapper">
             <div class="container">
                 <div id="doc-header" class="doc-header text-center">
-                    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i>Lesson 2</h1>
-                    <div class="meta"><i class="fa fa-clock-o"></i> Last updated: D@T3</div>
+                    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i>Game Development</h1>
+                    <div class="meta"><i class="fa fa-clock-o"></i> Snake Game using Phaser</div>
                 </div>
-                <!--//doc-header-->
                 <div class="doc-body">
                     <div class="doc-content">
                         <div class="content-inner">
+                            <section id="introduction-section" class="doc-section">
+                                <h2 class="section-title">Drawing the Snake</h2>
+                                <div class="section-block">
+                                    <p>As we mentioned earlier, the <b>Game state</b> is where the actual game play happens. This is also the place where we will draw the snake. Like we did with the Menu state, we need to register the <b>Game state</b> with the global game object in <b>main.js</b>. 
+                                        <br>Here is how your code should look like:</p>
+                                </div>
+                            </section>
+                            <!--//doc-section-->
+                            <section id="gamesdev-section" class="doc-section">
+                                <h2 class="section-title">main.js</h2>
+                                <div id="step1" class="section-block">
+                                    
+<pre><code class="language-markup">
+var game;
+
+game = new Phaser.Game(600, 450, Phaser.AUTO, '');
+        
+game.state.add('Menu', Menu);
+        
+// Adding the Game state.
+game.state.add('Game', Game);
+        
+game.state.start('Menu');
+</code></pre>
 
 
+                                </div>
+                                <!--//section-block-->
+                            </section>
                         </div>
                         <!--//content-inner-->
 
 
                         <div class="content-inner">
                             <section id="nextsteps-section" class="doc-section">
-                                <h2 class="section-title">Next Steps</h2>
+                                <h2 class="section-title">menu.js</h2>
                                 <div class="section-block">
+
+                                    <p>We'll also want to add some code in <b>menu.js</b> to let us start the <b>Game</b> state when it is clicked. For this purpose, we will replace the sprite with a button. Adding a button is basically the same as adding a sprite, you only need to provide a function to be called when it is clicked. 
+                                        <br>Here is the final <b>menu.js</b> code:</p>
+<pre><code class="language-markup">
+var Menu = {
+
+    preload : function() {
+    // Load all the needed resources for the menu.
+        game.load.image('menu', './assets/images/menu.png');
+    },
+        
+    create: function () {
+        
+    // Add menu screen.
+    // It will act as a button to start the game.
+        this.add.button(0, 0, 'menu', this.startGame, this);
+        
+    },
+        
+    startGame: function () {
+        
+    // Change the state to the actual game.
+        this.state.start('Game');
+        
+    }
+        
+};
+
+</code></pre>
+
 
                                 </div>
                             </section>
-
+                            <!--//doc-section-->
                             <!--//doc-section-->
                         </div>
+
+                        
+
+                        <div class="content-inner">
+                                <section id="nextsteps-section" class="doc-section">
+                                    <h2 class="section-title">game.js</h2>
+                                    <div class="section-block">
+    
+                                        <p>We can now proceed with coding the <b>Game</b> state and drawing the snake. The structure is similar to the one of the Menu state.</p>
+    <pre><code class="language-markup">
+    var snake, apple, squareSize, score, speed,
+    updateDelay, direction, new_direction,
+    addNew, cursors, scoreTextValue, speedTextValue, 
+    textStyle_Key, textStyle_Value;
+        
+var Game = {
+        
+    preload : function() {
+        // Here we load all the needed resources for the level.
+        // In our case, that's just two squares - one for the snake body and one for the apple.
+        game.load.image('snake', './assets/images/snake.png');
+        game.load.image('apple', './assets/images/apple.png');
+    },
+        
+    create : function() {
+        
+        // By setting up global variables in the create function, we initialise them on game start.
+        // We need them to be globally available so that the update function can alter them.
+        
+        snake = [];                     // This will work as a stack, containing the parts of our snake
+        apple = {};                     // An object for the apple;
+        squareSize = 15;                // The length of a side of the squares. Our image is 15x15 pixels.
+        score = 0;                      // Game score.
+        speed = 0;                      // Game speed.
+        updateDelay = 0;                // A variable for control over update rates.
+        direction = 'right';            // The direction of our snake.
+        new_direction = null;           // A buffer to store the new direction into.
+        addNew = false;                 // A variable used when an apple has been eaten.
+        
+         // Set up a Phaser controller for keyboard input.
+        cursors = game.input.keyboard.createCursorKeys();
+        
+        game.stage.backgroundColor = '#061f27';
+        
+        // Generate the initial snake stack. Our snake will be 10 elements long.
+        // Beginning at X=150 Y=150 and increasing the X on every iteration.
+        for(var i = 0; i < 10; i++){
+        snake[i] = game.add.sprite(150+i*squareSize, 150, 'snake');  // Parameters are (X coordinate, Y coordinate, image)
+        }
+        
+        // Genereate the first apple.
+        this.generateApple();
+        
+        // Add Text to top of game.
+        textStyle_Key = { font: "bold 14px sans-serif", fill: "#46c0f9", align: "center" };
+        textStyle_Value = { font: "bold 18px sans-serif", fill: "#fff", align: "center" };
+        
+         // Score.
+        game.add.text(30, 20, "SCORE", textStyle_Key);
+        scoreTextValue = game.add.text(90, 18, score.toString(), textStyle_Value);
+        // Speed.
+        game.add.text(500, 20, "SPEED", textStyle_Key);
+        speedTextValue = game.add.text(558, 18, speed.toString(), textStyle_Value);
+        
+    },
+        
+    update: function() {
+        // The update function is called constantly at a high rate (somewhere around 60fps),
+        // updating the game field every time.
+        // We are going to leave that one empty for now.
+    },
+        
+    generateApple: function(){
+        
+        // Chose a random place on the grid.
+        // X is between 0 and 585 (39*15)
+        // Y is between 0 and 435 (29*15)
+        
+        var randomX = Math.floor(Math.random() * 40 ) * squareSize,
+            randomY = Math.floor(Math.random() * 30 ) * squareSize;
+        
+        // Add a new apple.
+        apple = game.add.sprite(randomX, randomY, 'apple');
+    }
+        
+};
+    </code></pre>
+    
+    
+                                    </div>
+                                </section>
+                                <!--//doc-section-->
+                                <!--//doc-section-->
+                            </div>
+
+
+
+
+
                         <!--//content-inner-->
                     </div>
                     <!--//doc-content-->
                     <div class="doc-sidebar hidden-xs">
                         <nav id="doc-nav">
                             <ul id="doc-menu" class="nav doc-menu" data-spy="affix">
-                                undefined<li><a href="Game-Development.html">Game Development</a></li>
-<li><a href="Lesson-1.html">Lesson 1</a></li>
-<li><a href="Lesson-2.html">Lesson 2</a></li>
-<li><a href="Lesson-3.html">Lesson 3</a></li>
-<li><a href="Lesson-4.html">Lesson 4</a></li>
-<li><a href="Lesson-5.html">Lesson 5</a></li>
+      <li><a href="Game-Development.html">Intro & Setup</a></li>
+<li><a href="Lesson-1.html">Loading an Image</a></li>
+<li><a href="Lesson-2.html">Drawing the Snake</a></li>
+<li><a href="Lesson-3.html">Movement and Control</a></li>
+<li><a href="Lesson-4.html">Collision Detection</a></li>
 
                             </ul>
                             <!--//doc-menu-->
@@ -105,41 +259,7 @@
         </div>
         <!--//doc-wrapper-->
 
-        <div id="promo-block" class="promo-block">
-            <div class="container">
-                <div class="promo-block-inner">
-                    <h3 class="promo-title text-center"><i class="fa fa-heart"></i> <a href="https://wrapbootstrap.com/theme/appkit-admin-theme-angularjs-WB051SCJ1?ref=3wm" target="_blank">AppKit - Bootstrap Angular Admin Theme for Developers</a></h3>
-                    <div class="row">
-                        <div class="figure-holder col-md-5 col-sm-6 col-xs-12">
-                            <div class="figure-holder-inner">
-                                <a href="https://wrapbootstrap.com/theme/appkit-admin-theme-angularjs-WB051SCJ1?ref=3wm" target="_blank"><img class="img-responsive" src="assets/images/demo/appkit-widgets-thumb.jpg" alt="AppKit Theme" /></a>
-                                <a class="mask" href="#hook"><i class="icon fa fa-heart pink"></i></a>
 
-                            </div>
-                        </div>
-                        <!--//figure-holder-->
-                        <div class="content-holder col-md-7 col-sm-6 col-xs-12">
-                            <div class="content-holder-inner">
-                                <div class="desc">
-                                    <h4 class="content-title"><strong>Love this free documentation theme?</strong></h4>
-                                    <p>Check out AppKit - an Angular admin theme I created with my developer friend <a href="https://twitter.com/tnajdek">Tom Najdek</a> for developers. AppKit uses modern front-end technologies and is packed with useful components
-                                        and widgets to speed up your app development.</p>
-                                    <p><strong class="highlight">[Tip for developers]:</strong> If your project is Open Source, you can use this area to promote your other projects or hold third party adverts like Bootstrap and FontAwesome do!</p>
-                                </div>
-                                <!--//desc-->
-                                <div class="author"><a href="http://themes.3rdwavemedia.com">Xiaoying Riley</a></div>
-                            </div>
-                            <!--//content-holder-inner-->
-                        </div>
-                        <!--//content-holder-->
-                    </div>
-                    <!--//row-->
-                </div>
-                <!--//promo-block-inner-->
-            </div>
-            <!--//container-->
-        </div>
-        <!--//promo-block-->
 
     </div>
     <!--//page-wrapper-->
@@ -147,7 +267,7 @@
     <footer id="footer" class="footer text-center">
         <div class="container">
             <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can check out other license options via our website: themes.3rdwavemedia.com */-->
-            <small class="copyright">Designed with <i class="fa fa-heart"></i> by <a href="http://themes.3rdwavemedia.com/" targe="_blank">Xiaoying Riley</a> for developers</small>
+            <small class="copyright"><p class="license">Portions of this content are ©1998–2016 by individual mozilla.org contributors. Content available under a <a href="https://www.mozilla.org/foundation/licensing/website-content/">Creative Commons license</a>.</p></small>
 
         </div>
         <!--//container-->

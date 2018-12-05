@@ -6,7 +6,7 @@
 <!--<![endif]-->
 
 <head>
-    <title>Responsive website template for documentations</title>
+    <title>Snake Game-Phaser</title>
     <!-- Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,7 +48,7 @@
                 <!--//branding-->
                 <ol class="breadcrumb">
                     <li><a href="index.html">Home</a></li>
-                    <li class="active">Lesson 3</li>
+                    <li class="active">Game Development</li>
                 </ol>
             </div>
             <!--//container-->
@@ -57,41 +57,130 @@
         <div class="doc-wrapper">
             <div class="container">
                 <div id="doc-header" class="doc-header text-center">
-                    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i>Lesson 3</h1>
-                    <div class="meta"><i class="fa fa-clock-o"></i> Last updated: D@T3</div>
+                    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i>Game Development</h1>
+                    <div class="meta"><i class="fa fa-clock-o"></i> Snake Game using Phaser</div>
                 </div>
-                <!--//doc-header-->
                 <div class="doc-body">
                     <div class="doc-content">
                         <div class="content-inner">
-
-
-                        </div>
-                        <!--//content-inner-->
-
-
-                        <div class="content-inner">
-                            <section id="nextsteps-section" class="doc-section">
-                                <h2 class="section-title">Next Steps</h2>
+                            <section id="introduction-section" class="doc-section">
+                                <h2 class="section-title">Movement and Control</h2>
                                 <div class="section-block">
+                                    <p>To make the snake move we'll be working in the <b>update</b> function of <b>game.js</b>.</p>
 
+                                    <p>First of all, we create event listeners for controlling the direction of the snake with the arrow keys.</p>
+
+                                    <p>The actual movement is a bit complex, since update is triggered at a very quick rate, and if we move the snake every time it's called we would end up with one uncontrollably speedy reptile. To change this, we've set up an if statement that checks weather this is the 10th consecutive call of <b>update()</b> using a counter variable called <b>updateDelay</b>.</p>
+
+                                    <p>If it really is the 10th call, we remove the last square of our snake (first element in the stack), give it new coordinates according to the current direction and place it in front of the head of the snake (top of the stack). Here's how the code looks like:</p>
+
+<pre><code class="language-markup">
+        update: function() {
+
+            // Handle arrow key presses, while not allowing illegal direction changes that will kill the player.
+        
+            if (cursors.right.isDown && direction!='left')
+            {
+                new_direction = 'right';
+            }
+            else if (cursors.left.isDown && direction!='right')
+            {
+                new_direction = 'left';
+            }
+            else if (cursors.up.isDown && direction!='down')
+            {
+                new_direction = 'up';
+            }
+            else if (cursors.down.isDown && direction!='up')
+            {
+                new_direction = 'down';
+            }
+        
+            // A formula to calculate game speed based on the score.
+            // The higher the score, the higher the game speed, with a maximum of 10;
+            speed = Math.min(10, Math.floor(score/5));
+            // Update speed value on game screen.
+            speedTextValue.text = '' + speed;
+        
+            // Since the update function of Phaser has an update rate of around 60 FPS,
+            // we need to slow that down make the game playable.
+        
+            // Increase a counter on every update call.
+            updateDelay++;
+        
+            // Do game stuff only if the counter is aliquot to (10 - the game speed).
+            // The higher the speed, the more frequently this is fulfilled,
+            // making the snake move faster.
+            if (updateDelay % (10 - speed) == 0) {
+        
+                // Snake movement
+        
+                var firstCell = snake[snake.length - 1],
+                    lastCell = snake.shift(),
+                    oldLastCellx = lastCell.x,
+                    oldLastCelly = lastCell.y;
+        
+                // If a new direction has been chosen from the keyboard, make it the direction of the snake now.
+                if(new_direction){
+                    direction = new_direction;
+                    new_direction = null;
+                }
+        
+                // Change the last cell's coordinates relative to the head of the snake, according to the direction.
+        
+                if(direction == 'right'){
+        
+                    lastCell.x = firstCell.x + 15;
+                    lastCell.y = firstCell.y;
+                }
+                else if(direction == 'left'){
+                    lastCell.x = firstCell.x - 15;
+                    lastCell.y = firstCell.y;
+                }
+                else if(direction == 'up'){
+                    lastCell.x = firstCell.x;
+                    lastCell.y = firstCell.y - 15;
+                }
+                else if(direction == 'down'){
+                    lastCell.x = firstCell.x;
+                    lastCell.y = firstCell.y + 15;
+                }
+        
+                // Place the last cell in the front of the stack.
+                // Mark it the first cell.
+        
+                snake.push(lastCell);
+                firstCell = lastCell;
+        
+            }
+        
+        }
+</code></pre>
+
+<p>Try and control the snake via the arrow keys on your keyboard.</p>
+                                
+                                
                                 </div>
                             </section>
-
                             <!--//doc-section-->
-                        </div>
+                            
+                            </div>
+
+
+
+
+
                         <!--//content-inner-->
                     </div>
                     <!--//doc-content-->
                     <div class="doc-sidebar hidden-xs">
                         <nav id="doc-nav">
                             <ul id="doc-menu" class="nav doc-menu" data-spy="affix">
-                                undefined<li><a href="Game-Development.html">Game Development</a></li>
-<li><a href="Lesson-1.html">Lesson 1</a></li>
-<li><a href="Lesson-2.html">Lesson 2</a></li>
-<li><a href="Lesson-3.html">Lesson 3</a></li>
-<li><a href="Lesson-4.html">Lesson 4</a></li>
-<li><a href="Lesson-5.html">Lesson 5</a></li>
+      <li><a href="Game-Development.html">Intro & Setup</a></li>
+<li><a href="Lesson-1.html">Loading an Image</a></li>
+<li><a href="Lesson-2.html">Drawing the Snake</a></li>
+<li><a href="Lesson-3.html">Movement and Control</a></li>
+<li><a href="Lesson-4.html">Collision Detection</a></li>
 
                             </ul>
                             <!--//doc-menu-->
@@ -105,41 +194,7 @@
         </div>
         <!--//doc-wrapper-->
 
-        <div id="promo-block" class="promo-block">
-            <div class="container">
-                <div class="promo-block-inner">
-                    <h3 class="promo-title text-center"><i class="fa fa-heart"></i> <a href="https://wrapbootstrap.com/theme/appkit-admin-theme-angularjs-WB051SCJ1?ref=3wm" target="_blank">AppKit - Bootstrap Angular Admin Theme for Developers</a></h3>
-                    <div class="row">
-                        <div class="figure-holder col-md-5 col-sm-6 col-xs-12">
-                            <div class="figure-holder-inner">
-                                <a href="https://wrapbootstrap.com/theme/appkit-admin-theme-angularjs-WB051SCJ1?ref=3wm" target="_blank"><img class="img-responsive" src="assets/images/demo/appkit-widgets-thumb.jpg" alt="AppKit Theme" /></a>
-                                <a class="mask" href="#hook"><i class="icon fa fa-heart pink"></i></a>
 
-                            </div>
-                        </div>
-                        <!--//figure-holder-->
-                        <div class="content-holder col-md-7 col-sm-6 col-xs-12">
-                            <div class="content-holder-inner">
-                                <div class="desc">
-                                    <h4 class="content-title"><strong>Love this free documentation theme?</strong></h4>
-                                    <p>Check out AppKit - an Angular admin theme I created with my developer friend <a href="https://twitter.com/tnajdek">Tom Najdek</a> for developers. AppKit uses modern front-end technologies and is packed with useful components
-                                        and widgets to speed up your app development.</p>
-                                    <p><strong class="highlight">[Tip for developers]:</strong> If your project is Open Source, you can use this area to promote your other projects or hold third party adverts like Bootstrap and FontAwesome do!</p>
-                                </div>
-                                <!--//desc-->
-                                <div class="author"><a href="http://themes.3rdwavemedia.com">Xiaoying Riley</a></div>
-                            </div>
-                            <!--//content-holder-inner-->
-                        </div>
-                        <!--//content-holder-->
-                    </div>
-                    <!--//row-->
-                </div>
-                <!--//promo-block-inner-->
-            </div>
-            <!--//container-->
-        </div>
-        <!--//promo-block-->
 
     </div>
     <!--//page-wrapper-->
@@ -147,7 +202,7 @@
     <footer id="footer" class="footer text-center">
         <div class="container">
             <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can check out other license options via our website: themes.3rdwavemedia.com */-->
-            <small class="copyright">Designed with <i class="fa fa-heart"></i> by <a href="http://themes.3rdwavemedia.com/" targe="_blank">Xiaoying Riley</a> for developers</small>
+            <small class="copyright"><p class="license">Portions of this content are ©1998–2016 by individual mozilla.org contributors. Content available under a <a href="https://www.mozilla.org/foundation/licensing/website-content/">Creative Commons license</a>.</p></small>
 
         </div>
         <!--//container-->

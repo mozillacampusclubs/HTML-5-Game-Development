@@ -6,7 +6,7 @@
 <!--<![endif]-->
 
 <head>
-    <title>Responsive website template for documentations</title>
+    <title>Snake Game-Phaser</title>
     <!-- Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,7 +48,7 @@
                 <!--//branding-->
                 <ol class="breadcrumb">
                     <li><a href="index.html">Home</a></li>
-                    <li class="active">Lesson 4</li>
+                    <li class="active">Game Development</li>
                 </ol>
             </div>
             <!--//container-->
@@ -57,41 +57,176 @@
         <div class="doc-wrapper">
             <div class="container">
                 <div id="doc-header" class="doc-header text-center">
-                    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i>Lesson 4</h1>
-                    <div class="meta"><i class="fa fa-clock-o"></i> Last updated: D@T3</div>
+                    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i>Game Development</h1>
+                    <div class="meta"><i class="fa fa-clock-o"></i> Snake Game using Phaser</div>
                 </div>
-                <!--//doc-header-->
                 <div class="doc-body">
                     <div class="doc-content">
                         <div class="content-inner">
-
-
-                        </div>
-                        <!--//content-inner-->
-
-
-                        <div class="content-inner">
-                            <section id="nextsteps-section" class="doc-section">
-                                <h2 class="section-title">Next Steps</h2>
+                            <section id="introduction-section" class="doc-section">
+                                <h2 class="section-title">Collision Detection</h2>
                                 <div class="section-block">
+                                    <p>A game in which the snake is roaming freely in the playing field is not much fun. We need to detect when the snake comes in contact with a wall, an apple or itself. This is called collision detection.<br></p>
+
+                                            <p>This is usually done by using a physics engine, of which the Phaser framework supports a few. But they are too complex for a simple game like this. We will instead do our own collision detection by comparing coordinates.<br></p>
+                                            
+                                            <p>In the update function, after the code for moving the snake, we call a number of methods. They will compare coordinates to tell us if a collision has occurred.</p>
+
+<pre><code class="language-markup">
+        update: function() {
+
+            // Snake movement
+            // ...
+            // End of snake movement
+    
+            // Increase length of snake if an apple had been eaten.
+            // Create a block in the back of the snake with the old position of the previous last block
+            // (it has moved now along with the rest of the snake).
+    
+            if(addNew){
+                snake.unshift(game.add.sprite(oldLastCellx, oldLastCelly, 'snake'));
+                addNew = false;
+            }
+    
+            // Check for apple collision.
+            this.appleCollision();
+    
+            // Check for collision with self. Parameter is the head of the snake.
+            this.selfCollision(firstCell);
+    
+            // Check with collision with wall. Parameter is the head of the snake.
+            this.wallCollision(firstCell);
+        }
+    
+    },
+    
+    appleCollision: function() {
+    
+        // Check if any part of the snake is overlapping the apple.
+        // This is needed if the apple spawns inside of the snake.
+        for(var i = 0; i < snake.length; i++){
+            if(snake[i].x == apple.x && snake[i].y == apple.y){
+    
+                // Next time the snake moves, a new block will be added to its length.
+                addNew = true;
+    
+                // Destroy the old apple.
+                apple.destroy();
+    
+                // Make a new one.
+                this.generateApple();
+    
+                // Increase score.
+                score++;
+    
+                // Refresh scoreboard.
+                scoreTextValue.text = score.toString();
+    
+            }
+        }
+    
+    },
+    
+    selfCollision: function(head) {
+    
+        // Check if the head of the snake overlaps with any part of the snake.
+        for(var i = 0; i < snake.length - 1; i++){
+            if(head.x == snake[i].x && head.y == snake[i].y){
+    
+                // If so, go to game over screen.
+                game.state.start('Game_Over');
+            }
+        }
+    
+    },
+    
+    wallCollision: function(head) {
+    
+        // Check if the head of the snake is in the boundaries of the game field.
+    
+        if(head.x >= 600 || head.x < 0 || head.y >= 450 || head.y < 0){
+    
+            // If it's not in, we've hit a wall. Go to game over screen.
+            game.state.start('Game_Over');
+        }
+    
+    }
+</code></pre>
+
+<p>When the snake collides with the apple we increase the score and the length of the snake. But when a collision with the wall or the snake body occurs, we should end the game. To do this, we need to make the <b>Game_Over</b> state. Again, we need to register it with main.js. Add this line near the bottom of that file:</p>
+
+<p><b>main.js</b></p>
+
+<pre><code class="language-markup">
+    game.state.add('Game_Over', Game_Over);
+</code>
+</pre>
+
+<p>And the state itself:</p>
+
+<p><b>game_over.js</b></p>
+
+<pre><code class="language-markup">
+        var Game_Over = {
+
+            preload : function() {
+                // Load the needed image for this game screen.
+                game.load.image('gameover', './assets/images/gameover.png');
+            },
+        
+            create : function() {
+        
+                // Create button to start game like in Menu.
+                this.add.button(0, 0, 'gameover', this.startGame, this);
+        
+                // Add text with information about the score from last game.
+                game.add.text(235, 350, "LAST SCORE", { font: "bold 16px sans-serif", fill: "#46c0f9", align: "center"});
+                game.add.text(350, 348, score.toString(), { font: "bold 20px sans-serif", fill: "#fff", align: "center" });
+        
+            },
+        
+            startGame: function () {
+        
+                // Change the state back to Game.
+                this.state.start('Game');
+        
+            }
+        
+        };
+</code>
+</pre>
+
+<P><b>That's it our Snake Game is Ready!!</b></P>
+
+
+
+
+
+
 
                                 </div>
                             </section>
-
                             <!--//doc-section-->
-                        </div>
+                            
+                                <!--//doc-section-->
+                                <!--//doc-section-->
+                            </div>
+
+
+
+
+
                         <!--//content-inner-->
                     </div>
                     <!--//doc-content-->
                     <div class="doc-sidebar hidden-xs">
                         <nav id="doc-nav">
                             <ul id="doc-menu" class="nav doc-menu" data-spy="affix">
-                                undefined<li><a href="Game-Development.html">Game Development</a></li>
-<li><a href="Lesson-1.html">Lesson 1</a></li>
-<li><a href="Lesson-2.html">Lesson 2</a></li>
-<li><a href="Lesson-3.html">Lesson 3</a></li>
-<li><a href="Lesson-4.html">Lesson 4</a></li>
-<li><a href="Lesson-5.html">Lesson 5</a></li>
+      <li><a href="Game-Development.html">Intro & Setup</a></li>
+<li><a href="Lesson-1.html">Loading an Image</a></li>
+<li><a href="Lesson-2.html">Drawing the Snake</a></li>
+<li><a href="Lesson-3.html">Movement and Control</a></li>
+<li><a href="Lesson-4.html">Collision Detection</a></li>
 
                             </ul>
                             <!--//doc-menu-->
@@ -105,41 +240,7 @@
         </div>
         <!--//doc-wrapper-->
 
-        <div id="promo-block" class="promo-block">
-            <div class="container">
-                <div class="promo-block-inner">
-                    <h3 class="promo-title text-center"><i class="fa fa-heart"></i> <a href="https://wrapbootstrap.com/theme/appkit-admin-theme-angularjs-WB051SCJ1?ref=3wm" target="_blank">AppKit - Bootstrap Angular Admin Theme for Developers</a></h3>
-                    <div class="row">
-                        <div class="figure-holder col-md-5 col-sm-6 col-xs-12">
-                            <div class="figure-holder-inner">
-                                <a href="https://wrapbootstrap.com/theme/appkit-admin-theme-angularjs-WB051SCJ1?ref=3wm" target="_blank"><img class="img-responsive" src="assets/images/demo/appkit-widgets-thumb.jpg" alt="AppKit Theme" /></a>
-                                <a class="mask" href="#hook"><i class="icon fa fa-heart pink"></i></a>
 
-                            </div>
-                        </div>
-                        <!--//figure-holder-->
-                        <div class="content-holder col-md-7 col-sm-6 col-xs-12">
-                            <div class="content-holder-inner">
-                                <div class="desc">
-                                    <h4 class="content-title"><strong>Love this free documentation theme?</strong></h4>
-                                    <p>Check out AppKit - an Angular admin theme I created with my developer friend <a href="https://twitter.com/tnajdek">Tom Najdek</a> for developers. AppKit uses modern front-end technologies and is packed with useful components
-                                        and widgets to speed up your app development.</p>
-                                    <p><strong class="highlight">[Tip for developers]:</strong> If your project is Open Source, you can use this area to promote your other projects or hold third party adverts like Bootstrap and FontAwesome do!</p>
-                                </div>
-                                <!--//desc-->
-                                <div class="author"><a href="http://themes.3rdwavemedia.com">Xiaoying Riley</a></div>
-                            </div>
-                            <!--//content-holder-inner-->
-                        </div>
-                        <!--//content-holder-->
-                    </div>
-                    <!--//row-->
-                </div>
-                <!--//promo-block-inner-->
-            </div>
-            <!--//container-->
-        </div>
-        <!--//promo-block-->
 
     </div>
     <!--//page-wrapper-->
@@ -147,7 +248,7 @@
     <footer id="footer" class="footer text-center">
         <div class="container">
             <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can check out other license options via our website: themes.3rdwavemedia.com */-->
-            <small class="copyright">Designed with <i class="fa fa-heart"></i> by <a href="http://themes.3rdwavemedia.com/" targe="_blank">Xiaoying Riley</a> for developers</small>
+            <small class="copyright"><p class="license">Portions of this content are ©1998–2016 by individual mozilla.org contributors. Content available under a <a href="https://www.mozilla.org/foundation/licensing/website-content/">Creative Commons license</a>.</p></small>
 
         </div>
         <!--//container-->

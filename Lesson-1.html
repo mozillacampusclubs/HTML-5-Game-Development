@@ -6,7 +6,7 @@
 <!--<![endif]-->
 
 <head>
-    <title>Responsive website template for documentations</title>
+    <title>Snake Game-Phaser</title>
     <!-- Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,7 +48,7 @@
                 <!--//branding-->
                 <ol class="breadcrumb">
                     <li><a href="index.html">Home</a></li>
-                    <li class="active">Lesson 1</li>
+                    <li class="active">Game Development</li>
                 </ol>
             </div>
             <!--//container-->
@@ -57,27 +57,86 @@
         <div class="doc-wrapper">
             <div class="container">
                 <div id="doc-header" class="doc-header text-center">
-                    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i>Lesson 1</h1>
-                    <div class="meta"><i class="fa fa-clock-o"></i> Last updated: D@T3</div>
+                    <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i>Game Development</h1>
+                    <div class="meta"><i class="fa fa-clock-o"></i> Snake Game using Phaser</div>
                 </div>
-                <!--//doc-header-->
                 <div class="doc-body">
                     <div class="doc-content">
                         <div class="content-inner">
+                            <section id="introduction-section" class="doc-section">
+                                <h2 class="section-title">Loading an Image</h2>
+                                <div class="section-block">
+                                    <p>Right now, our game doesn't do anything. Let's code the <b>Menu</b> state, and make it display the title screen.
+
+                                            During the setup we included the Phaser library in our HTML file. This gives us a global object called <b>Phaser</b>. Through it, we can access the library's methods and functions for building games.
+                                            
+                                            Now we will use the global Phaser object, and create a new game instance. This is an object which represents our entire game. We will add the states to it.
+                                            
+                                            </p>
+                                </div>
+                            </section>
+                            <!--//doc-section-->
+                            <section id="gamesdev-section" class="doc-section">
+                                <h2 class="section-title">main.js</h2>
+                                <div id="step1" class="section-block">
+                                    
+<pre><code class="language-markup">
+var game;
+
+// Create a new game instance 600px wide and 450px tall:
+game = new Phaser.Game(600, 450, Phaser.AUTO, '');
+
+// First parameter is how our state will be called.
+// Second parameter is an object containing the needed methods for state functionality
+game.state.add('Menu', Menu);
+
+game.state.start('Menu');
+</code></pre>
 
 
+                                </div>
+                                <!--//section-block-->
+                            </section>
                         </div>
                         <!--//content-inner-->
 
 
                         <div class="content-inner">
                             <section id="nextsteps-section" class="doc-section">
-                                <h2 class="section-title">Next Steps</h2>
+                                <h2 class="section-title">menu.js</h2>
                                 <div class="section-block">
+
+                                    <p>Now we need to initialize our Menu state object. In <b>menu.js</b> define a new object and add the functions below. When the state is started, the <b>preload</b> function will be called first, loading all the needed assets for our game. Once preloading finishes, <b>create</b> gets called, initializing the playing field and everything we want on it:</p>
+<pre><code class="language-markup">
+var Menu = {
+
+    preload : function() {
+    // Loading images is required so that later on we can create sprites based on the them.
+    // The first argument is how our image will be refered to, 
+    // the second one is the path to our file.
+    game.load.image('menu', './assets/images/menu.png');
+    },
+        
+    create: function () {
+    // Add a sprite to your game, here the sprite will be the game's logo
+    // Parameters are : X , Y , image name (see above) 
+    this.add.sprite(0, 0, 'menu');
+    }
+        
+};
+
+</code></pre>
+
+<p>Because of browser security restrictions, to start the game you'll need a locally running web server. This page from the Phaser guidelines has plenty of options for all operating systems - <a href="http://phaser.io/tutorials/getting-started/part2">here</a>. <b>In other words, it won't work if you simply double click your index.html</b>.
+
+        <br>If everything has been done right, a page with the the start screen should appear in your browser.
+        
+        </p>
+
 
                                 </div>
                             </section>
-
+                            <!--//doc-section-->
                             <!--//doc-section-->
                         </div>
                         <!--//content-inner-->
@@ -86,12 +145,11 @@
                     <div class="doc-sidebar hidden-xs">
                         <nav id="doc-nav">
                             <ul id="doc-menu" class="nav doc-menu" data-spy="affix">
-                                undefined<li><a href="Game-Development.html">Game Development</a></li>
-<li><a href="Lesson-1.html">Lesson 1</a></li>
-<li><a href="Lesson-2.html">Lesson 2</a></li>
-<li><a href="Lesson-3.html">Lesson 3</a></li>
-<li><a href="Lesson-4.html">Lesson 4</a></li>
-<li><a href="Lesson-5.html">Lesson 5</a></li>
+      <li><a href="Game-Development.html">Intro & Setup</a></li>
+<li><a href="Lesson-1.html">Loading an Image</a></li>
+<li><a href="Lesson-2.html">Drawing the Snake</a></li>
+<li><a href="Lesson-3.html">Movement and Control</a></li>
+<li><a href="Lesson-4.html">Collision Detection</a></li>
 
                             </ul>
                             <!--//doc-menu-->
@@ -105,41 +163,7 @@
         </div>
         <!--//doc-wrapper-->
 
-        <div id="promo-block" class="promo-block">
-            <div class="container">
-                <div class="promo-block-inner">
-                    <h3 class="promo-title text-center"><i class="fa fa-heart"></i> <a href="https://wrapbootstrap.com/theme/appkit-admin-theme-angularjs-WB051SCJ1?ref=3wm" target="_blank">AppKit - Bootstrap Angular Admin Theme for Developers</a></h3>
-                    <div class="row">
-                        <div class="figure-holder col-md-5 col-sm-6 col-xs-12">
-                            <div class="figure-holder-inner">
-                                <a href="https://wrapbootstrap.com/theme/appkit-admin-theme-angularjs-WB051SCJ1?ref=3wm" target="_blank"><img class="img-responsive" src="assets/images/demo/appkit-widgets-thumb.jpg" alt="AppKit Theme" /></a>
-                                <a class="mask" href="#hook"><i class="icon fa fa-heart pink"></i></a>
 
-                            </div>
-                        </div>
-                        <!--//figure-holder-->
-                        <div class="content-holder col-md-7 col-sm-6 col-xs-12">
-                            <div class="content-holder-inner">
-                                <div class="desc">
-                                    <h4 class="content-title"><strong>Love this free documentation theme?</strong></h4>
-                                    <p>Check out AppKit - an Angular admin theme I created with my developer friend <a href="https://twitter.com/tnajdek">Tom Najdek</a> for developers. AppKit uses modern front-end technologies and is packed with useful components
-                                        and widgets to speed up your app development.</p>
-                                    <p><strong class="highlight">[Tip for developers]:</strong> If your project is Open Source, you can use this area to promote your other projects or hold third party adverts like Bootstrap and FontAwesome do!</p>
-                                </div>
-                                <!--//desc-->
-                                <div class="author"><a href="http://themes.3rdwavemedia.com">Xiaoying Riley</a></div>
-                            </div>
-                            <!--//content-holder-inner-->
-                        </div>
-                        <!--//content-holder-->
-                    </div>
-                    <!--//row-->
-                </div>
-                <!--//promo-block-inner-->
-            </div>
-            <!--//container-->
-        </div>
-        <!--//promo-block-->
 
     </div>
     <!--//page-wrapper-->
@@ -147,7 +171,7 @@
     <footer id="footer" class="footer text-center">
         <div class="container">
             <!--/* This template is released under the Creative Commons Attribution 3.0 License. Please keep the attribution link below when using for your own project. Thank you for your support. :) If you'd like to use the template without the attribution, you can check out other license options via our website: themes.3rdwavemedia.com */-->
-            <small class="copyright">Designed with <i class="fa fa-heart"></i> by <a href="http://themes.3rdwavemedia.com/" targe="_blank">Xiaoying Riley</a> for developers</small>
+            <small class="copyright"><p class="license">Portions of this content are ©1998–2016 by individual mozilla.org contributors. Content available under a <a href="https://www.mozilla.org/foundation/licensing/website-content/">Creative Commons license</a>.</p></small>
 
         </div>
         <!--//container-->

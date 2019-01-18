@@ -6,7 +6,7 @@
 <!--<![endif]-->
 
 <head>
-    <title>Responsive website template for documentations</title>
+    <title>Snake Game-Phaser</title>
     <!-- Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -58,7 +58,7 @@
             <div class="container">
                 <div id="doc-header" class="doc-header text-center">
                     <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i>Game Development</h1>
-                    <div class="meta"><i class="fa fa-clock-o"></i> Last updated: D@T3</div>
+                    <div class="meta"><i class="fa fa-clock-o"></i> Snake Game using Phaser</div>
                 </div>
                 <div class="doc-body">
                     <div class="doc-content">
@@ -66,50 +66,36 @@
                             <section id="introduction-section" class="doc-section">
                                 <h2 class="section-title">Introduction</h2>
                                 <div class="section-block">
-                                    <p>Before we can start writing the game's functionality, we need to create a basic structure to render the game inside. This can be done using HTML - Phaser framework will generate the Canvas element on its own.
-                                    </p>
+                                    <p>Everybody loves classic games. How many of you remember the retro snake game from old Nokia phones? We sure do. This is why for this lesson we decided to recreate it using HTML5. There is a great open source game development framework called Phaser that we will use.
+
+                                            You will learn about sprites, game states and how to use the preload, create and update methods</p>
                                 </div>
                             </section>
                             <!--//doc-section-->
                             <section id="gamesdev-section" class="doc-section">
-                                <h2 class="section-title">The game's HTML</h2>
+                                <h2 class="section-title">Setup</h2>
                                 <div id="step1" class="section-block">
-                                    <p>Before we can start writing the game's functionality, we need to create a basic structure to render the game inside. This can be done using HTML - Phaser framework will generate the Canvas element on its own.</p>
+                                    <p> Download a zip archive with the file structure of the game <a href="https://drive.google.com/file/d/1X1KRleI1UOh5KgCRUuZPfKXhY4mbGmEH/view?usp=sharing">here</a> It contains all the image assets needed for the game but no code. We will be writing this next.<br>
+                                        
+                                        Now open <b>index.html</b>, add a title for your page and create links to all the JS files. Later, to play the game, just open this file in your browser.</p>
                                     <pre><code class="language-markup">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
     &lt;meta charset="utf-8" /&gt;
-    &lt;title&gt;Gamedev Phaser Workshop - lesson 01: Initialize the framework&lt;/title&gt;
-    &lt;style&gt;* { padding: 0; margin: 0; }&lt;/style&gt;
-    &lt;script src="js/phaser.2.4.2.min.js"&gt;&lt;/script&gt;
+    &lt;title&gt;Snake Game using Phaser&lt;/title&gt;
+    &lt;script src="assets/js/phaser.min.js"&gt;&lt;/script&gt;
+    &lt;script src="assets/js/menu.js"&gt;&lt;/script&gt;
+    &lt;script src="assets/js/game.js"&gt;&lt;/script&gt;
+    &lt;script src="assets/js/game_over.js"&gt;&lt;/script&gt;
+    &lt;script src="assets/js/main.js"&gt;&lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;script&gt;
-var game = new Phaser.Game(480, 320, Phaser.AUTO, null, {
-    preload: preload, create: create, update: update
-});
-function preload() {}
-function create() {}
-function update() {}
-&lt;/script&gt;
+
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 
-                                    <p>We have a <kbd>charset</kbd> defined, <kbd>&lt;title&gt;</kbd> and some basic CSS in the header resetting the default <kbd>margin</kbd> and <kbd>padding</kbd>. There is also the <kbd>&lt;script&gt;</kbd> element including
-                                        the Phaser's source code. The body also contains the <kbd>&lt;script&gt;</kbd> element, but we will render the game there and write the JavaScript code that controls it.</p>
-
-                                    <p>The Canvas element is generated automatically by the framework. We are initializing it by creating a new <kbd>Phaser.Game</kbd> object and assigning it to the game variable. The following parameters are: width and height
-                                        of the Canvas, rendering method, <kbd>id</kbd> of the Canvas if it exist already and the names of the key functions. All the JavaScript code we will write in this tutorial will go between the opening &lt;script&gt;
-                                        and closing &lt;/script&gt; tags.</p>
-
-                                    <p>Our Canvas will be 480 pixels high and 320 pixels wide. Using <kbd>Phaser.AUTO</kbd> we are setting up an automatic way to render the game - the other two options are <kbd>CANVAS</kbd> and <kbd>WEBGL</kbd>. We can set
-                                        one of them explicitly or use <kbd>AUTO</kbd> to let Phaser decide which one to use. It usually works in a way that if the WebGL context is available, the framework will use it, and fall back to Canvas 2D context
-                                        if it's not available.</p>
-
-                                    <p>We don't have the Canvas element created on our own, so we don't have to enter any reference <kbd>id</kbd> and leave it blank as <kbd>null</kbd>. The last object contains the three key function names reserved for Phaser
-                                        - we will use the same names to keep it clean. The <kbd>preload</kbd> function takes care of preloading the assets, <kbd>create</kbd> is executed once when everything is loaded and ready, and the <kbd>update</kbd>                                        function is executed on every frame. These three are enough to make the proper mechanism of loading, starting and updating our game loop.</p>
-
-
+                                    <p>Your directory should look like this:</p>
+                                    <img src="assets/images/demo/dir.png" alt="Directory View" />
 
                                 </div>
                                 <!--//section-block-->
@@ -120,21 +106,20 @@ function update() {}
 
                         <div class="content-inner">
                             <section id="nextsteps-section" class="doc-section">
-                                <h2 class="section-title">Next Steps</h2>
+                                <h2 class="section-title">How the Game is organized</h2>
                                 <div class="section-block">
 
-                                    <p>Now we've set up the basic HTML and learned a bit about Phaser initialization, so let's continue to the second lesson and see how <a href="article02.html">scaling</a> work.</p>
+                                    <p>Phaser games are organized around states. Think of states in Phaser as the different parts of a game. Here are the states of our game:
+
+                                        <ul>
+                                        <li>The <b>Menu</b> state. It is handled by <b>menu.js</b>, and only displays the start image. When it is clicked, the game transitions to the <b>Game</b> state.</li>
+                                        <li><b>Game</b> state. It is handled by <b>game.js</b>. This is the actual play area of the game. You control the snake, eat apples and have lots of fun. When you die, you transition to the Game_Over state.</li>
+                                        <li><b>Game_Over</b> state. It shows <b>gameover.png</b> and displays your last score. When it is clicked you transition to the Game state.</li>
+                                        </ul>
+                                        <b>main.js</b> is our main JavaScript file. This is the place where we will create a new game instance and add a menu state.</p>
                                 </div>
                             </section>
                             <!--//doc-section-->
-                            <section id="gamesdev-section" class="doc-section">
-                                <h2 class="section-title">The game's HTML</h2>
-                                <div id="step1" class="section-block">
-                                    <p>Before we can start writing the game's functionality, we need to create a basic structure to render the game inside. This can be done using HTML - Phaser framework will generate the Canvas element on its own.</p>
-
-                                </div>
-                                <!--//section-block-->
-                            </section>
                             <!--//doc-section-->
                         </div>
                         <!--//content-inner-->
@@ -143,12 +128,11 @@ function update() {}
                     <div class="doc-sidebar hidden-xs">
                         <nav id="doc-nav">
                             <ul id="doc-menu" class="nav doc-menu" data-spy="affix">
-      <li><a href="Game-Development.html">Game Development</a></li>
-<li><a href="Lesson-1.html">Lesson 1</a></li>
-<li><a href="Lesson-2.html">Lesson 2</a></li>
-<li><a href="Lesson-3.html">Lesson 3</a></li>
-<li><a href="Lesson-4.html">Lesson 4</a></li>
-<li><a href="Lesson-5.html">Lesson 5</a></li>
+      <li><a href="Game-Development.html">Intro & Setup</a></li>
+<li><a href="Lesson-1.html">Loading an Image</a></li>
+<li><a href="Lesson-2.html">Drawing the Snake</a></li>
+<li><a href="Lesson-3.html">Movement and Control</a></li>
+<li><a href="Lesson-4.html">Collision Detection</a></li>
 
                             </ul>
                             <!--//doc-menu-->
